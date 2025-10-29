@@ -1,295 +1,261 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Doutzen Tracker — Strong From Within</title>
-  <style>
-    :root { --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#38bdf8; --good:#22c55e; --warn:#f59e0b; --bad:#ef4444; }
-    html,body { margin:0; padding:0; background:var(--bg); color:var(--text); font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 20px; }
-    header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    h1 { font-size: 1.25rem; margin: 0; letter-spacing: .2px; }
-    .date { color: var(--muted); font-size: .9rem; }
-    .grid { display:grid; grid-template-columns: 1fr; gap: 14px; margin-top: 16px; }
-    @media(min-width:720px){ .grid { grid-template-columns: 1fr 1fr; } }
-    .card { background: var(--card); border-radius: 16px; padding: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.35); }
-    .card h2 { margin: 0 0 10px; font-size: 1rem; color: #cbd5e1; }
-    label { display:block; font-size: .9rem; color: #cbd5e1; margin-bottom:6px; }
-    input[type="range"] { width: 100%; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
-    .btn { appearance:none; border:1px solid transparent; background: #1f2937; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor:pointer; font-weight:600; }
-    .btn:hover { border-color: #334155; }
-    .btn.primary { background: var(--accent); color:#0b1220; }
-    .pill { padding: 6px 10px; border-radius: 999px; background:#0b1220; color:var(--muted); border:1px solid #334155; }
-    .emoji { font-size: 24px; line-height:1; cursor:pointer; filter: saturate(.9); }
-    .emoji.active { outline: 2px solid var(--accent); border-radius: 10px; }
-    .small { font-size: .85rem; color: var(--muted); }
-    .stat { font-variant-numeric: tabular-nums; font-weight: 700; }
-    .success { color: var(--good); }
-    .warn { color: var(--warn); }
-    .bad { color: var(--bad); }
-    textarea, input[type="text"]{ width:100%; background:#0b1220; border:1px solid #334155; color:var(--text); border-radius:12px; padding:10px; resize: vertical; }
-    footer { margin: 18px 0; display:flex; gap:10px; flex-wrap: wrap; }
-    .hr { height:1px; background:#1f2937; margin:10px 0; border:none; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doutzen Tracker</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f172a" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    body { font-family: system-ui, sans-serif; margin:0; background:#0f172a; color:#f8fafc; }
+    h1,h2 { color:#f1f5f9; margin:0 0 8px 0; }
+    .container { max-width:640px; margin:auto; padding:16px; }
+    .card { background:#1e293b; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+    .row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;}
+    .btn { background:#2563eb; color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:15px;}
+    .btn:active { transform:scale(0.97);}
+    input,select,textarea { background:#334155; color:#f1f5f9; border:none; border-radius:6px; padding:6px; }
+    textarea{width:100%; min-height:60px;}
+    .emoji{font-size:28px; cursor:pointer; margin-right:4px;}
+    .active{outline:2px solid #38bdf8; border-radius:8px;}
+    .small{font-size:14px; color:#cbd5e1;}
+    .pill{background:#334155; border-radius:16px; padding:4px 10px; font-size:14px;}
+    table{width:100%;border-collapse:collapse;}
+    th,td{padding:6px 4px;border-bottom:1px solid #1f2937;text-align:left;}
+    a{color:#38bdf8;text-decoration:none;}
+    a:hover{text-decoration:underline;}
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Strong From Within — Doutzen</h1>
-      <div class="date" id="today"></div>
-    </header>
+  <div class="container">
+    <h1>Doutzen Tracker 💪</h1>
 
-    <div class="grid">
-      <section class="card" id="moodCard">
-        <h2>1) Mood & Focus</h2>
-        <div class="row" id="moodRow" aria-label="Kies je mood">
-          <button class="emoji" data-mood="😄" title="blij">😄</button>
-          <button class="emoji" data-mood="🙂" title="ok">🙂</button>
-          <button class="emoji" data-mood="😐" title="neutral">😐</button>
-          <button class="emoji" data-mood="😕" title="meh">😕</button>
-          <button class="emoji" data-mood="😴" title="moe">😴</button>
-          <button class="emoji" data-mood="😣" title="stress">😣</button>
-        </div>
-        <div class="hr"></div>
-        <label for="breath">Adem: 4–6 ademhaling gedaan?</label>
-        <div class="row">
-          <button class="btn" id="breathBtn">Nog niet</button>
-          <span class="small" id="breathNote"></span>
-        </div>
-      </section>
+    <section class="card">
+      <h2>1) Hoe voel je je vandaag?</h2>
+      <div id="mood" class="row"></div>
+    </section>
 
-      <section class="card">
-        <h2>2) Knie & Lichaam</h2>
-        <label for="pain">Kniegevoel (0 = top, 10 = au): <span class="stat" id="painVal">0</span></label>
-        <input type="range" id="pain" min="0" max="10" step="1" value="0" />
-        <div class="row" style="margin-top:8px">
-          <button class="btn" id="trainBtn">Training gedaan</button>
-          <span class="small" id="trainNote"></span>
-        </div>
-        <div class="row" style="margin-top:8px">
-          <button class="btn" id="stretchBtn">Rekken gedaan</button>
-          <span class="small" id="stretchNote"></span>
-        </div>
-      </section>
+    <section class="card">
+      <h2>2) Knie</h2>
+      <div class="row">
+        <input id="pain" type="range" min="0" max="10" step="1" />
+        <span id="painVal"></span>
+      </div>
+    </section>
 
-      <section class="card">
-        <h2>3) Hydratatie</h2>
-        <div class="row">
-          <button class="btn" id="waterMinus">−</button>
-          <div>Glazen water: <span class="stat" id="waterCount">0</span></div>
-          <button class="btn" id="waterPlus">+</button>
-        </div>
-        <p class="small">Doel: 6–8 per dag (meer bij sport).</p>
-      </section>
+    <section class="card">
+      <h2>3) Water</h2>
+      <div class="row">
+        <button class="btn" id="waterMinus">−</button>
+        <span id="waterVal"></span>
+        <button class="btn" id="waterPlus">+</button>
+      </div>
+    </section>
 
-      <section class="card">
-        <h2>4) Voeding & Notities</h2>
-        <label for="meal">Wat heb je gegeten dat je goed deed?</label>
-        <textarea id="meal" rows="3" placeholder="Bijv. havermout met bosbessen, olijfolie, seitan, groenten…"></textarea>
-        <label for="note" style="margin-top:8px">Notitie (lichaam/energie/zin):</label>
-        <textarea id="note" rows="3" placeholder="Wat viel je op in je lichaam of humeur?"></textarea>
-      </section>
+    <section class="card">
+      <h2>4) Trainen & Rekken</h2>
+      <div class="row">
+        <button class="btn" id="trainBtn">🏋️‍♀️ Getraind</button>
+        <button class="btn" id="stretchBtn">🧘‍♀️ Gerekt</button>
+      </div>
+    </section>
 
-      <section class="card">
-        <h2>5) Badges & Streak</h2>
-        <div class="row">
-          <span class="pill">Streak: <span class="stat" id="streak">0</span> dagen</span>
-          <span class="pill">Deze week aanwezig: <span class="stat" id="showups">0</span>×</span>
-        </div>
-        <p id="badgeMsg" class="small"></p>
-      </section>
+    <section class="card">
+      <h2>5) Voeding</h2>
+      <textarea id="meal" placeholder="Wat heb je gegeten?"></textarea>
+    </section>
 
-      <section class="card">
-        <h2>6) Overzicht vandaag</h2>
-        <div class="small" id="summary"></div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn primary" id="saveBtn">Opslaan</button>
-          <button class="btn" id="exportJSON">Export JSON</button>
-          <button class="btn" id="exportCSV">Export CSV</button>
-          <button class="btn" id="resetBtn" title="Leegt vandaag (niet de historie)">Reset vandaag</button>
-        </div>
-      </section>
-    </div>
+    <section class="card">
+      <h2>6) Notities</h2>
+      <textarea id="note" placeholder="Wat wil je onthouden?"></textarea>
+    </section>
 
-    <footer>
-      <span class="small">Data blijft lokaal in je browser (localStorage). Je kunt exporteren voor backup of delen met je coach.</span>
-    </footer>
+    <section class="card">
+      <h2>Opslaan</h2>
+      <div class="row">
+        <button class="btn" id="saveBtn">💾 Opslaan</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
+      <p class="small">Streak: <span id="streak"></span> dagen</p>
+    </section>
+
+    <section class="card" id="weekCard">
+      <h2>7) Weekoverzicht</h2>
+      <div id="weekTable" class="small"></div>
+    </section>
+
+    <section class="card" id="reminderCard">
+      <h2>8) Dagelijkse herinnering</h2>
+      <div class="row" style="margin-bottom:8px">
+        <label>Tijd:</label>
+        <input id="reminderTime" type="time" value="19:00" style="max-width:160px" />
+        <label class="pill"><input id="reminderEnable" type="checkbox" /> Herinnering aanzetten</label>
+        <button class="btn" id="notifyTest">Testmelding</button>
+      </div>
+      <p class="small" id="reminderStatus"></p>
+    </section>
+
+    <section class="card" id="chartsCard">
+      <h2>9) Grafieken (7 dagen)</h2>
+      <p class="small">Snelle trendweergave. Tip: houd je data dagelijks bij voor mooiere lijnen.</p>
+      <div style="display:grid; gap:12px">
+        <div><div class="small">Knie (0 = top, 10 = au)</div><canvas id="painChart" width="600" height="220" style="width:100%"></canvas></div>
+        <div><div class="small">Water (glazen per dag)</div><canvas id="waterChart" width="600" height="220" style="width:100%"></canvas></div>
+      </div>
+    </section>
+
+    <section class="card" id="planCard">
+      <h2>10) Weekplan Oefeningen</h2>
+      <div class="row" style="margin-bottom:8px">
+        <label>Startdatum:</label><input id="planStart" type="date" />
+        <label>Week:</label><select id="planWeek"></select>
+      </div>
+      <div id="planInfo" class="small"></div>
+      <div id="planList"></div>
+    </section>
+
   </div>
 
-  <script>
-    // --- Helpers ---
-    const $ = (sel) => document.querySelector(sel);
-    const todayKey = () => new Date().toISOString().slice(0,10); // YYYY-MM-DD
-    const storeKey = 'doutzen-tracker-v1';
+  <footer style="text-align:center;padding:16px;font-size:13px;color:#94a3b8;">© Doutzen Tracker</footer>
 
-    const state = {
-      mood: null,
-      breath: false,
-      pain: 0,
-      trained: false,
-      stretched: false,
-      water: 0,
-      meal: '',
-      note: '',
-      date: todayKey()
-    };
+<script>
+const $ = sel => document.querySelector(sel);
+const KEY='doutzen-data'; const todayKey=()=>new Date().toISOString().slice(0,10);
+function loadAll(){return JSON.parse(localStorage.getItem(KEY)||'{}');}
+function saveAll(o){localStorage.setItem(KEY,JSON.stringify(o));}
+function loadToday(){return loadAll()[todayKey()]||{};}
+function saveToday(d){const all=loadAll();all[todayKey()]=d;saveAll(all);}
+const state={mood:null,pain:0,water:0,trained:false,stretched:false,meal:'',note:''};
 
-    const loadAll = () => JSON.parse(localStorage.getItem(storeKey) || '{}');
-    const saveAll = (obj) => localStorage.setItem(storeKey, JSON.stringify(obj));
-    const loadToday = () => {
-      const all = loadAll();
-      return all[state.date] || null;
-    };
+const moods=['😀','🙂','😐','😕','😢'];
+$('#mood').innerHTML=moods.map(m=>`<span class="emoji" data-mood="${m}">${m}</span>`).join('');
 
-    const saveToday = (data) => {
-      const all = loadAll();
-      all[state.date] = data;
-      saveAll(all);
-      updateStreakAndShowups();
-    };
+function render(){
+  $('#pain').value=state.pain; $('#painVal').textContent=state.pain;
+  $('#waterVal').textContent=state.water+' glazen';
+  document.querySelectorAll('.emoji').forEach(e=>e.classList.toggle('active',e.dataset.mood===state.mood));
+  $('#meal').value=state.meal; $('#note').value=state.note;
+  $('#streak').textContent=getStreak();
+}
 
-    // --- UI bindings ---
-    const setTodayText = () => {
-      const d = new Date();
-      const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-      $('#today').textContent = d.toLocaleDateString('nl-NL', opts);
-    };
+function loadStreak(){return Number(localStorage.getItem('doutzen-streak')||0);}
+function saveStreak(n){localStorage.setItem('doutzen-streak',n);}
+function getStreak(){return loadStreak();}
 
-    const render = () => {
-      $('#pain').value = state.pain;
-      $('#painVal').textContent = state.pain;
-      $('#waterCount').textContent = state.water;
-      $('#meal').value = state.meal;
-      $('#note').value = state.note;
-      $('#breathBtn').textContent = state.breath ? 'Gedaan ✅' : 'Nog niet';
-      $('#trainBtn').textContent = state.trained ? 'Klaar ✅' : 'Training gedaan';
-      $('#stretchBtn').textContent = state.stretched ? 'Klaar ✅' : 'Rekken gedaan';
-      $('#breathNote').textContent = state.breath ? '3 min 4–6 ademhaling' : '';
-      $('#trainNote').textContent = state.trained ? 'Nice! Je bouwt kracht op.' : '';
-      $('#stretchNote').textContent = state.stretched ? 'Top! Spieren & fascia blij.' : '';
+function updateStreakAndShowups(){
+  const all=loadAll(); const keys=Object.keys(all).sort();
+  let streak=0; let last=null;
+  keys.forEach(k=>{if(!last){streak=1;}else{const d1=new Date(k),d2=new Date(last);if((d1-d2)/86400000===1){streak++;}}last=k;});
+  saveStreak(streak);
+}
 
-      document.querySelectorAll('.emoji').forEach(b => {
-        b.classList.toggle('active', b.dataset.mood === state.mood);
-      });
+// Weekoverzicht
+function renderWeek(){
+  const all=loadAll(); const days=[];
+  for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);days.push({key,data:all[key]||null});}
+  const headers=['Datum','Mood','Knie','Water','Trainen','Rekken'];
+  let html='<table><thead><tr>'+headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
+  days.forEach(({key,data})=>{
+    const d=new Date(key);const lab=d.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit',month:'2-digit'});
+    const cells=[lab,data?.mood||'—',data?data.pain:'—',data?data.water:'—',data&&data.trained?'✅':'—',data&&data.stretched?'✅':'—'];
+    html+='<tr>'+cells.map(c=>`<td>${c}</td>`).join('')+'</tr>';
+  }); html+='</tbody></table>'; $('#weekTable').innerHTML=html;
+}
 
-      const sum = [
-        state.mood ? `Mood: ${state.mood}` : null,
-        `Knie: ${state.pain}/10`,
-        state.trained ? 'Getraind' : null,
-        state.stretched ? 'Gerekt' : null,
-        `Water: ${state.water}`,
-      ].filter(Boolean).join(' • ');
-      $('#summary').textContent = sum;
+// Herinnering
+const reminderKey='doutzen-reminder';
+const getReminder=()=>JSON.parse(localStorage.getItem(reminderKey)||'{"enabled":false,"hour":19,"minute":0,"lastFired":""}');
+const saveReminder=r=>localStorage.setItem(reminderKey,JSON.stringify(r));
+async function ensureNotificationPermission(){
+  if(!('Notification'in window))return false;
+  if(Notification.permission==='granted')return true;
+  if(Notification.permission!=='denied'){const p=await Notification.requestPermission();return p==='granted';}
+  return false;
+}
+function fireReminder(){const t='Doutzen Tracker',b='Check-in: mood, knie, water, training 💪';
+  if('Notification'in window&&Notification.permission==='granted'){new Notification(t,{body:b,icon:'./icon-512.png'});}else{alert(b);}
+}
+function checkReminder(){
+  const r=getReminder();if(!r.enabled)return;
+  const n=new Date(),hh=n.getHours(),mm=n.getMinutes(),today=n.toISOString().slice(0,10);
+  if(hh===r.hour&&mm===r.minute&&r.lastFired!==today){fireReminder();r.lastFired=today;saveReminder(r);}
+}
+function updateReminderUI(){
+  const r=getReminder();const hh=String(r.hour).padStart(2,'0'),mm=String(r.minute).padStart(2,'0');
+  $('#reminderTime').value=`${hh}:${mm}`;$('#reminderEnable').checked=!!r.enabled;
+  $('#reminderStatus').textContent=r.enabled?`Herinnering aan om ${hh}:${mm}`:'Herinnering uit.';
+}
+setInterval(checkReminder,60000);
 
-      updateBadges();
-    };
+// Grafieken
+function collectWeekSeries(){
+  const all=loadAll();const labels=[],pain=[],water=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);const row=all[key];
+    labels.push(d.toLocaleDateString('nl-NL',{weekday:'short',day:'2-digit'}));
+    pain.push(row?(typeof row.pain==='number'?row.pain:null):null);
+    water.push(row?(typeof row.water==='number'?row.water:null):null);
+  }return{labels,pain,water};
+}
+function drawLine(id,labels,data,opts={}){
+  const el=document.getElementById(id);if(!el)return;const ctx=el.getContext('2d');
+  ctx.clearRect(0,0,el.width,el.height);const W=el.width,H=el.height,P=30;
+  ctx.strokeStyle='#334155';ctx.beginPath();ctx.moveTo(P,10);ctx.lineTo(P,H-P);ctx.lineTo(W-10,H-P);ctx.stroke();
+  const minY=opts.minY??0,maxY=opts.maxY??Math.max(10,...data.filter(v=>v!==null));
+  ctx.fillStyle='#94a3b8';ctx.font='12px system-ui';
+  for(let i=0;i<=5;i++){const v=minY+i*(maxY-minY)/5;const y=H-P-((v-minY)/(maxY-minY||1))*(H-2*P);
+    ctx.strokeStyle='#1f2937';ctx.beginPath();ctx.moveTo(P,y);ctx.lineTo(W-10,y);ctx.stroke();ctx.fillText(Math.round(v),6,y+4);}
+  const n=labels.length,stepX=(W-2*P)/Math.max(1,n-1);
+  labels.forEach((lab,i)=>{const x=P+i*stepX;ctx.fillText(lab,x-12,H-P+16);});
+  ctx.strokeStyle=opts.color||'#38bdf8';ctx.lineWidth=2;ctx.beginPath();let start=false;
+  data.forEach((v,i)=>{if(v===null)return;const x=P+i*stepX;const y=H-P-((v-minY)/(maxY-minY||1))*(H-2*P);
+    if(!start){ctx.moveTo(x,y);start=true;}else{ctx.lineTo(x,y);} });ctx.stroke();
+  ctx.fillStyle=opts.color||'#38bdf8';
+  data.forEach((v,i)=>{if(v===null)return;const x=P+i*stepX;const y=H-P-((v-minY)/(maxY-minY||1))*(H-2*P);
+    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();});
+}
+function drawCharts(){
+  const{labels,pain,water}=collectWeekSeries();
+  drawLine('painChart',labels,pain,{color:'#ef4444',minY:0,maxY:10});
+  const maxW=Math.max(8,...water.filter(v=>v!==null));drawLine('waterChart',labels,water,{color:'#22c55e',minY:0,maxY:maxW});
+}
 
-    // Badges & streaks
-    function getWeekNumber(date) {
-      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-      return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
-    }
+// Weekplan (verkort, zie eerdere bericht voor alle weken)
+const PLAN_KEY='doutzen-plan';const PLAN_DONE_KEY='doutzen-plan-done';
+function loadPlan(){return JSON.parse(localStorage.getItem(PLAN_KEY)||'{}');}
+function savePlan(v){localStorage.setItem(PLAN_KEY,JSON.stringify(v));}
+function loadPlanDone(){return JSON.parse(localStorage.getItem(PLAN_DONE_KEY)||'{}');}
+function savePlanDone(v){localStorage.setItem(PLAN_DONE_KEY,JSON.stringify(v));}
+const WEEKS=[{title:'Week 1 – rust & activatie',notes:'Techniek eerst.',items:[{name:'Wall sit',spec:'2×20s'},{name:'Hip bridge',spec:'3×10'},{name:'Side leg lift',spec:'2×15'},{name:'Adem 4-6',spec:'3 min'}]}];
+function renderPlan(){
+  const cfg=loadPlan(),sel=$('#planWeek');
+  if(sel&&sel.options.length===0)WEEKS.forEach((w,i)=>{const o=document.createElement('option');o.value=i;o.textContent=w.title;sel.appendChild(o);});
+  const idx=parseInt(sel.value||0);const week=WEEKS[idx];
+  $('#planInfo').textContent=week.notes;$('#planList').innerHTML=week.items.map((it,i)=>`<label><input type='checkbox' class='planCheck' data-idx='${i}'/> ${it.name} <span class='small'>(${it.spec})</span></label><br>`).join('');
+}
+document.addEventListener('change',e=>{
+  if(e.target.id==='reminderTime'){const[rh,rm]=e.target.value.split(':').map(Number);const r=getReminder();r.hour=rh;r.minute=rm;saveReminder(r);updateReminderUI();}
+  if(e.target.id==='reminderEnable'){const r=getReminder();r.enabled=e.target.checked;saveReminder(r);if(r.enabled)ensureNotificationPermission();updateReminderUI();}
+  if(e.target.classList.contains('planCheck'))renderPlan();
+});
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.classList.contains('emoji'))state.mood=t.dataset.mood;
+  if(t.id==='waterPlus')state.water++;
+  if(t.id==='waterMinus')state.water=Math.max(0,state.water-1);
+  if(t.id==='trainBtn')state.trained=!state.trained;
+  if(t.id==='stretchBtn')state.stretched=!state.stretched;
+  if(t.id==='saveBtn'){saveToday({...state});alert('Opgeslagen!');renderWeek();drawCharts();}
+  if(t.id==='resetBtn'){Object.assign(state,{mood:null,pain:0,water:0,trained:false,stretched:false,meal:'',note:''});}
+  if(t.id==='notifyTest')fireReminder();
+  render();
+});
+$('#pain').addEventListener('input',e=>{state.pain=+e.target.value;$('#painVal').textContent=state.pain;});
+$('#meal').addEventListener('input',e=>state.meal=e.target.value);
+$('#note').addEventListener('input',e=>state.note=e.target.value);
 
-    const updateStreakAndShowups = () => {
-      const all = loadAll();
-      const keys = Object.keys(all).sort();
-      // streak
-      let streak = 0;
-      const today = new Date(state.date);
-      for (let i = keys.length - 1; i >= 0; i--) {
-        const k = keys[i];
-        const d = new Date(k);
-        const diff = Math.round((today - d)/86400000);
-        if (diff === (keys.length-1 - i)) streak++; else break;
-      }
-      $('#streak').textContent = Math.max(streak, keys.includes(state.date)?1:0);
-
-      // showups this week
-      const now = new Date();
-      const w = getWeekNumber(now);
-      const y = now.getFullYear();
-      const count = keys.filter(k => {
-        const d = new Date(k);
-        return d.getFullYear()===y && getWeekNumber(d)===w;
-      }).length;
-      $('#showups').textContent = count;
-    };
-
-    const updateBadges = () => {
-      const msg = [];
-      if (state.trained && state.stretched) msg.push('Badge: Body Care');
-      if (state.water >= 6) msg.push('Badge: Hydration Hero');
-      if (state.breath) msg.push('Badge: Calm Captain');
-      if (state.mood === '😄') msg.push('Badge: Joy Spark');
-      $('#badgeMsg').textContent = msg.join(' • ');
-    };
-
-    // Export helpers
-    function exportJSON() {
-      const blob = new Blob([localStorage.getItem(storeKey) || '{}'], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'doutzen-tracker.json'; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function exportCSV() {
-      const all = loadAll();
-      const rows = [['date','mood','breath','pain','trained','stretched','water','meal','note']];
-      Object.keys(all).sort().forEach(k => {
-        const d = all[k];
-        rows.push([k, d.mood||'', d.breath?1:0, d.pain||0, d.trained?1:0, d.stretched?1:0, d.water||0, (d.meal||'').replace(/\n/g,' '), (d.note||'').replace(/\n/g,' ')]);
-      });
-      const csv = rows.map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'doutzen-tracker.csv'; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // --- Events ---
-    document.addEventListener('click', (e) => {
-      const t = e.target;
-      if (t.classList.contains('emoji')) { state.mood = t.dataset.mood; render(); }
-      if (t.id==='breathBtn') { state.breath = !state.breath; render(); }
-      if (t.id==='trainBtn') { state.trained = !state.trained; render(); }
-      if (t.id==='stretchBtn') { state.stretched = !state.stretched; render(); }
-      if (t.id==='waterPlus') { state.water++; render(); }
-      if (t.id==='waterMinus') { state.water = Math.max(0, state.water-1); render(); }
-      if (t.id==='saveBtn') { saveToday({...state}); render(); alert('Opgeslagen!'); }
-      if (t.id==='exportJSON') exportJSON();
-      if (t.id==='exportCSV') exportCSV();
-      if (t.id==='resetBtn') { Object.assign(state, { mood:null, breath:false, pain:0, trained:false, stretched:false, water:0, meal:'', note:'', date: todayKey() }); render(); }
-    });
-
-    $('#pain').addEventListener('input', e => { state.pain = +e.target.value; $('#painVal').textContent = state.pain; });
-    $('#meal').addEventListener('input', e => { state.meal = e.target.value; });
-    $('#note').addEventListener('input', e => { state.note = e.target.value; });
-
-    // Init
-    setTodayText();
-    const existing = loadToday();
-    if (existing) Object.assign(state, existing);
-    render();
-    updateStreakAndShowups();
-  </script>
-  <script>
-    // Register Service Worker for PWA install/offline
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .catch(err => console.log('SW register failed', err));
-      });
-    }
-  </script>
+// Init
+Object.assign(state,loadToday());
+render();updateStreakAndShowups();renderWeek();updateReminderUI();drawCharts();renderPlan();checkReminder();
+</script>
 </body>
 </html>
